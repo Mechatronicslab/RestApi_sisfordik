@@ -17,8 +17,10 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
     // include db handler
     require_once 'include/DB_Function.php';
     require_once 'include/AdminAkademik.php';
+    require_once 'include/AdminKeuangan.php';
 	$db = new DB_Functions();
     $AdminAkademik = new AdminAkademik();
+    $keuangan      = new DB_Function_Keuangan();
 
     // response Array
     $response = array("tag" => $tag, "error" => FALSE);
@@ -288,12 +290,28 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
         $id = $_POST['id'];
         $foto = $_FILES['pic']['name'];
         $AdminAkademik->uploadImage($id,$foto);
+    }else if($tag == 'viewNikKaryawan'){
+
+        $keuangan->getDataNikKaryawan();
+
+    }else if($tag == "getNikKeuangan"){
+
+        $nik = $_POST['nik'];
+
+        $cekNik = $keuangan->getNik($nik);
+        if ($cekNik) {
+            $response["error"]      = FALSE;
+            $response["nama"]  	    = $cekNik["nama"];
+            $response["pendidikan"] = $cekNik["pend_terakhir"];
+            $response["jabatan"]  	= $cekNik["jabatan"];
+            $response["error_msg"]  = "Berhasil";
+            echo json_encode($response);
+        } else {
+            $response["error"]      = TRUE;
+            $response["error_msg"]  = "Gagal Menambahkan Data";
+            echo json_encode($response);
+        }
     }
-	
-
-
-
-
 	else {
     // user failed to store
     $response["error"] = TRUE;
