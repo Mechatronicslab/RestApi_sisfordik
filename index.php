@@ -273,6 +273,19 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
             }
         }
     }
+    else if($tag == 'DeleteKaryawan'){
+        $nik = $_POST['nik'];
+        $delete = $AdminAkademik->delete($nik);
+        if ($delete != false) {
+                $response["error"] = FALSE;
+                $response["message"] = "Data Berhasil Dihapus";
+                echo json_encode($response);
+            } else {
+                $response["error"] = TRUE;
+                $response["error_msg"] = "Terjadi Kesalahan Silahkan Coba Lagi !";
+                echo json_encode($response);
+        }
+    }
     else if($tag == 'ShowKaryawan'){
         $AdminAkademik->ShowKaryawan();
     }

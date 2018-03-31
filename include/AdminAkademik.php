@@ -40,6 +40,15 @@ class AdminAkademik
         }
     }
 
+    public function delete($nik) {
+        $stmt = $this->conn->query("DELETE FROM m_karyawan WHERE nik='$nik'");
+        if ($stmt!=False) {
+            return $stmt;
+        } else {
+            return NULL;
+        }
+    }
+
     public function ShowKaryawan()
     {
         /* check connection */
@@ -139,6 +148,8 @@ class AdminAkademik
             throw new Exception("Could not upload file");
         }
     }
+
+
 
     public function cekNik($nik) {
         $stmt = $this->conn->prepare("SELECT * FROM m_karyawan WHERE nik = '$nik'");
