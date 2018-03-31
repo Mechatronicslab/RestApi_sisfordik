@@ -324,6 +324,33 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
             $response["error_msg"]  = "Gagal Menambahkan Data";
             echo json_encode($response);
         }
+    }else if($tag == "inputGajiKaryawan"){
+        $nik            = $_POST['nik'];
+        $nama           = $_POST['nama'];
+        $pendidikan     = $_POST['pendidikan'];
+        $jabatan        = $_POST['jabatan'];
+        $masaKerja      = $_POST['masakerja'];
+        $gajihpokok     = $_POST['gajihpokok'];
+        $tunJabatan     = $_POST['tunjabatan'];
+        $tunLain        = $_POST['tunlain'];
+        $potongan       = $_POST['potongan'];
+        $totalGajih     = $_POST['totgajih'];
+        $jumlahPinjam   = $_POST['jumpinjam'];
+        $jumlahPotongan = $_POST['jumpotongan'];
+        $sisaPinjaman   = $_POST['sisapinjam'];
+        $gajihBersih    = $_POST['gajihbersih'];
+        //$tglInput       = $_POST['tglinput'];
+
+        $input = $keuangan->inputGajihKaryawan($nik,$nama,$pendidikan,$jabatan,$masaKerja,$gajihpokok,$tunJabatan,$tunLain,$potongan,$totalGajih,$jumlahPinjam,$jumlahPotongan,$sisaPinjaman,$gajihBersih);
+        if ($input) {
+            $response["error"]      = FALSE;
+            $response["error_msg"]  = "Berhasil Input Gajih";
+            echo json_encode($response);
+        } else {
+            $response["error"]      = TRUE;
+            $response["error_msg"]  = "Gagal Menambahkan Data";
+            echo json_encode($response);
+        }
     }
 	else {
     // user failed to store

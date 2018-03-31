@@ -55,4 +55,17 @@ class DB_Function_Keuangan
             return NULL;
         }
     }
+
+    public function inputGajihKaryawan($nik,$nama,$pendidikan,$jabatan,$masaKerja,$gajihpokok,$tunJabatan,$tunLain,$potongan,$totalGajih,$jumlahPinjam,$jumlahPotongan,$sisaPinjaman,$gajihBersih) {
+        $stmt = $this->conn->prepare("INSERT INTO `t_gaji`(nik, `nama`, `pendidikan`, `jabatan`, `masa_kerja`, `gaji_pokok`, `tunjangan_jabatan`,
+                  `tunjangan_lainya`, `potongan`, `total_gaji`, `jmlah_pinjaman`, `jmlah_potongan`, `sisa_pinjaman`, `gaji_bersih`, `tgl_input`) VALUES
+                  ('$nik','$nama','$pendidikan','$jabatan','$masaKerja','$gajihpokok','$tunJabatan','$tunLain','$potongan','$totalGajih','$jumlahPinjam','$jumlahPotongan','$sisaPinjaman','$gajihBersih',NOW())");
+        if ($stmt->execute()) {
+            //$user = $stmt->get_result()->fetch_assoc();
+            //$stmt->close();
+            return $stmt;
+        } else {
+            return NULL;
+        }
+    }
 }
