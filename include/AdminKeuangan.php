@@ -61,8 +61,6 @@ class DB_Function_Keuangan
                   `tunjangan_lainya`, `potongan`, `total_gaji`, `jmlah_pinjaman`, `jmlah_potongan`, `sisa_pinjaman`, `gaji_bersih`, `tgl_input`) VALUES
                   ('$nik','$nama','$pendidikan','$jabatan','$masaKerja','$gajihpokok','$tunJabatan','$tunLain','$potongan','$totalGajih','$jumlahPinjam','$jumlahPotongan','$sisaPinjaman','$gajihBersih',NOW())");
         if ($stmt->execute()) {
-            //$user = $stmt->get_result()->fetch_assoc();
-            //$stmt->close();
             return $stmt;
         } else {
             return NULL;
