@@ -406,7 +406,7 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
     }else if($tag == 'viewAllDataGaji'){
 
         $keuangan->getDataGajih();
-
+        //
     }
 	else {
     // user failed to store

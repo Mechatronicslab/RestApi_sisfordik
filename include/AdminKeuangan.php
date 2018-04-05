@@ -132,7 +132,7 @@ class DB_Function_Keuangan
 
     public function getDataGajih()
     {
-        /* check connection */
+        /* **check connection */
         $query = $this->conn->query("SELECT nik,nama,gaji_bersih,tgl_input FROM `t_gaji`");
         $myArray = array();
         while ($row = $query->fetch_object()) {
