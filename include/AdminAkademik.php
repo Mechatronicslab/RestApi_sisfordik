@@ -40,7 +40,7 @@ class AdminAkademik
         }
     }
 
-    public function delete($nik) {
+    public function DeleteKaryawan($nik) {
         $stmt = $this->conn->query("DELETE FROM m_karyawan WHERE nik='$nik'");
         if ($stmt!=False) {
             return $stmt;
@@ -52,16 +52,18 @@ class AdminAkademik
     public function ShowKaryawan()
     {
         /* check connection */
-        $query = "SELECT foto,nama,nik,jabatan,status,sertifikasi FROM m_karyawan";
+        $query = "SELECT * FROM m_karyawan";
+        
         $result = $this->conn->query($query);
         $myArray = array();
+        $num_rows = mysqli_num_rows($result);
         while ($row = $result->fetch_object()) {
             $tempArray = $row;
             array_push($myArray, $tempArray);
         }
 
         if ($myArray != NULL) {
-            echo json_encode(array('error' => FALSE, 'result' => $myArray));
+            echo json_encode(array('error' => FALSE,'jml_data'=>$num_rows+1 ,'result' => $myArray));
 
         } else {
 
@@ -148,9 +150,101 @@ class AdminAkademik
             throw new Exception("Could not upload file");
         }
     }
+//=========================Data Pelajaran=======================================================
+    public function InsertMapel($kd_mapel,$nama_mapel)
+    {
+        $stmt = $this->conn->prepare("INSERT INTO tb_mapel(kd_mapel,nama_mapel) VALUES ('$kd_mapel','$nama_mapel')");
+        if ($stmt->execute()) {
+            return $stmt;
+        } else {
+            return NULL;
+        }
+    }
+
+     public function DeleteMapel($kd_mapel) {
+        $stmt = $this->conn->query("DELETE FROM tb_mapel WHERE kd_mapel='$kd_mapel'");
+        if ($stmt!=False) {
+            return $stmt;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function ShowMapel()
+    {
+        /* check connection */
+        $query = "SELECT kd_mapel,nama_mapel FROM tb_mapel";
+        $result = $this->conn->query($query);
+        $myArray = array();
+        while ($row = $result->fetch_object()) {
+            $tempArray = $row;
+            array_push($myArray, $tempArray);
+        }
+
+        if ($myArray != NULL) {
+            echo json_encode(array('error' => FALSE, 'result' => $myArray));
+
+        } else {
+
+            echo json_encode(array('error' => 'Data Tidak Ada'));
+        }
+        /* free result set */
+        $result->close();
+
+        /* close connection */
+        $this->conn->close();
+        return $result;
+    }
+
+    public function MapelGetById($kd_mapel)
+    {
+        /* check connection */
+        $query = $this->conn->query("SELECT * FROM tb_mapel where kd_mapel = '$kd_mapel'");
+        $myArray = array();
+        while ($row = $query->fetch_object()) {
+            $tempArray = $row;
+            array_push($myArray, $tempArray);
+        }
+
+        if ($myArray != NULL) {
+            echo json_encode(array('error' => FALSE, 'result' => $myArray));
+
+        } else {
+
+            echo json_encode(array('error_msg' => 'Terjadi Kesalahan'));
+        }
+        /* free result set */
+        $query->close();
+
+        /* close connection */
+        $this->conn->close();
+        return $query;
+    }
+
+    public function UpdateMapel($id,$kd_mapel,$nama_mapel)
+    {
+       $stmt = $this->conn->prepare("UPDATE `tb_mapel` SET `kd_mapel`='$kd_mapel',`nama_mapel`='$nama_mapel' WHERE id='$id'");
+        if ($stmt->execute()) {
+            return $stmt;
+        } else {
+            return NULL;
+        }
+    }
 
 
 
+
+//=========================fungsi Cek ===========================================================
+    public function cekKdMapel($kd_mapel) {
+        $stmt = $this->conn->prepare("SELECT kd_mapel FROM tb_mapel WHERE kd_mapel = '$kd_mapel'");
+        if ($stmt->execute()) {
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            return $user;
+        } else {
+            return NULL;
+        }
+    }
     public function cekNik($nik) {
         $stmt = $this->conn->prepare("SELECT * FROM m_karyawan WHERE nik = '$nik'");
         if ($stmt->execute()) {

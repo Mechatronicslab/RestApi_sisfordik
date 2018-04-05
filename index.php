@@ -259,6 +259,7 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 
         $cekNik = $AdminAkademik->cekNik($nik);
         if ($cekNik != false) {
+            $response["error"] = TRUE;
             $response["error_msg"] = "Data Dengan Nik Ini Sudah Ada";
             echo json_encode($response);
         } else {
@@ -277,7 +278,7 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
     }
     else if($tag == 'DeleteKaryawan'){
         $nik = $_POST['nik'];
-        $delete = $AdminAkademik->delete($nik);
+        $delete = $AdminAkademik->DeleteKaryawan($nik);
         if ($delete != false) {
                 $response["error"] = FALSE;
                 $response["message"] = "Data Berhasil Dihapus";
@@ -303,11 +304,75 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
         $id = $_POST['id'];
         $foto = $_FILES['pic']['name'];
         $AdminAkademik->uploadImage($id,$foto);
-    }else if($tag == 'viewNikKaryawan'){
+    }
+//----------------------------------------------Data Mata Pelajaran-----------------------------------------------------
+    else if ($tag == 'InsertMapel') {
+        $kd_mapel = $_POST['kd_mapel'];
+        $nama_mapel = $_POST['nama_mapel'];
+        $cekNik = $AdminAkademik->cekKdMapel($kd_mapel);
+        if ($cekNik != false) {
+            $response["error"] = TRUE;
+            $response["error_msg"] = "Data Dengan Kode Matapelajaran Ini Sudah Ada";
+            echo json_encode($response);
+        } else {
+            $insert = $AdminAkademik->InsertMapel($kd_mapel,$nama_mapel);
+            if ($insert != false) {
+                $response["error"] = FALSE;
+                $response["message"] = "Data Berhasil Ditambahkan";
+                echo json_encode($response);
+            } else {
+                $response["error"] = TRUE;
+                $response["error_msg"] = "Gagal Menambahkan Data";
+                echo json_encode($response);
+            }
+        }
+    
+    }
+    else if($tag == 'DeleteMapel'){
+        $kd_mapel = $_POST['kd_mapel'];
+        $delete = $AdminAkademik->DeleteMapel($kd_mapel);
+        if ($delete != false) {
+                $response["error"] = FALSE;
+                $response["message"] = "Data Berhasil Dihapus";
+                echo json_encode($response);
+            } else {
+                $response["error"] = TRUE;
+                $response["error_msg"] = "Terjadi Kesalahan Silahkan Coba Lagi !";
+                echo json_encode($response);
+        }
+    }
+    else if($tag == 'ShowMapel'){
+        $AdminAkademik->ShowMapel();
+    }
+    else if($tag == 'MapelGetById'){
+        $kd_mapel = $_POST['kd_mapel'];
+        $AdminAkademik->MapelGetById($kd_mapel);
+    }
+    else if($tag == 'UpdateMapel') {
+        $id = $_POST['id'];
+        $kd_mapel = $_POST['kd_mapel'];
+        $nama_mapel = $_POST['nama_mapel'];
+        $update = $AdminAkademik->UpdateMapel($id,$kd_mapel,$nama_mapel);
+        if ($update != false) {
+            $response["error"] = FALSE;
+            $response["message"] = "Data Berhasil Disimpan";
+            echo json_encode($response);
+        } else {
+            $response["error"] = TRUE;
+            $response["error_msg"] = "Gagal Menyimpan Data";
+            echo json_encode($response);
+        }
+        
+    }
+
+//==============================================Admin Keuangan==========================================================
+//----------------------------------------------Gajih Karyawan ---------------------------------------------------------
+    else if($tag == 'viewNikKaryawan'){
 
         $keuangan->getDataNikKaryawan();
 
-    }else if($tag == "getNikKeuangan"){
+    }
+    else if($tag == "getNikKeuangan"){
 
         $nik = $_POST['nik'];
 
@@ -318,33 +383,6 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
             $response["pendidikan"] = $cekNik["pend_terakhir"];
             $response["jabatan"]  	= $cekNik["jabatan"];
             $response["error_msg"]  = "Berhasil";
-            echo json_encode($response);
-        } else {
-            $response["error"]      = TRUE;
-            $response["error_msg"]  = "Gagal Menambahkan Data";
-            echo json_encode($response);
-        }
-    }else if($tag == "inputGajiKaryawan"){
-        $nik            = $_POST['nik'];
-        $nama           = $_POST['nama'];
-        $pendidikan     = $_POST['pendidikan'];
-        $jabatan        = $_POST['jabatan'];
-        $masaKerja      = $_POST['masakerja'];
-        $gajihpokok     = $_POST['gajihpokok'];
-        $tunJabatan     = $_POST['tunjabatan'];
-        $tunLain        = $_POST['tunlain'];
-        $potongan       = $_POST['potongan'];
-        $totalGajih     = $_POST['totgajih'];
-        $jumlahPinjam   = $_POST['jumpinjam'];
-        $jumlahPotongan = $_POST['jumpotongan'];
-        $sisaPinjaman   = $_POST['sisapinjam'];
-        $gajihBersih    = $_POST['gajihbersih'];
-        //$tglInput       = $_POST['tglinput'];
-
-        $input = $keuangan->inputGajihKaryawan($nik,$nama,$pendidikan,$jabatan,$masaKerja,$gajihpokok,$tunJabatan,$tunLain,$potongan,$totalGajih,$jumlahPinjam,$jumlahPotongan,$sisaPinjaman,$gajihBersih);
-        if ($input) {
-            $response["error"]      = FALSE;
-            $response["error_msg"]  = "Berhasil Input Gajih";
             echo json_encode($response);
         } else {
             $response["error"]      = TRUE;
